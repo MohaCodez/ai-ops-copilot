@@ -2,6 +2,7 @@ package main
 
 import (
 	"api-gateway/handlers"
+	"api-gateway/kafka"
 	"api-gateway/middleware"
 	"log"
 	"net/http"
@@ -11,6 +12,9 @@ import (
 )
 
 func main() {
+	//Initialize Kafka producer once at startup
+	// All handlers share this single writer instance.
+	kafka.InitProducer("localhost:9092", "queries")
 	r := chi.NewRouter()
 
 	r.Use(chiMiddleware.Recoverer)
